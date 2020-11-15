@@ -1,0 +1,11 @@
+<h2 class="text-2xl font-bold">Les lieux</h2>
+<div class="grid grid-cols-4 gap-4 mt-3">
+  <div *ngFor="let lieu of lieux">
+    <a routerLink="/lieu/{{lieu.slug}}">
+      <div class="p-3 bg-purple-100 rounded border border-purple-400">
+        <h4 class="font-semibold">{{lieu.nom}}</h4>
+        <p class="text-sm text-italic text-right mt-3">{{lieu.localisation.city}}, {{lieu.localisation.zipcode}}</p>
+      </div>
+    </a>
+  </div>
+</div>

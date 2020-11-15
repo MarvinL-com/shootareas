@@ -1,7 +1,8 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {mustMatch} from "../_helpers/must-match.validator";
 import {AuthenticationService} from "../authentication.service";
+import {LocalStorageService} from "../local-storage.service";
 
 @Component({
   selector: 'app-auth-form',
@@ -9,11 +10,13 @@ import {AuthenticationService} from "../authentication.service";
   styleUrls: ['./auth-form.component.scss']
 })
 export class AuthFormComponent implements OnInit {
+  @Input() login
+  @Input() signup
   loginForm: FormGroup
   signupForm: FormGroup
 
 
-  constructor(private fb: FormBuilder, private authService: AuthenticationService) {
+  constructor(private fb: FormBuilder, private authService: AuthenticationService, private ls: LocalStorageService) {
   }
 
   get f() {
@@ -39,11 +42,11 @@ export class AuthFormComponent implements OnInit {
 
   handleLogin() {
     if (this.loginForm.invalid) return
-    this.authService.doLogin(this.loginForm.value)
+    this.login(this.loginForm.value)
   }
 
   handleSignup() {
     if (this.signupForm.invalid) return
-    console.log('success:', this.loginForm.value)
+    this.signup(this.signupForm.value)
   }
 }

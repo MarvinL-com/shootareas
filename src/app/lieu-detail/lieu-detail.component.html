@@ -1,0 +1,5 @@
+<div *ngIf="lieu" class="container">
+  <button (click)="goBack()">Retour</button>
+  <h1>{{lieu.nom}}</h1>
+  <p>{{lieu.localisation.city}}, {{lieu.localisation.zipcode}}</p>
+</div>

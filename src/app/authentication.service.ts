@@ -3,9 +3,9 @@ import {environment} from "../environments/environment";
 import {MessageService} from "./message.service";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {User} from "./user";
 import {catchError} from "rxjs/operators";
 import {handleError} from "./_helpers/handle-error";
+import {AuthUser} from "./auth-user";
 
 @Injectable({
   providedIn: 'root'
@@ -16,12 +16,15 @@ export class AuthenticationService {
   constructor(private messageService: MessageService, private http: HttpClient) {
   }
 
-  doLogin(formData): Observable<User> {
-    return this.http.post<User>(this.api + '/local', formData).pipe(
-      catchError(handleError<User>('login', this.messageService, null))
+  doLogin({email, password}): Observable<AuthUser> {
+    return this.http.post<AuthUser>(this.api + '/local', {identifier: email, password}).pipe(
+      catchError(handleError<AuthUser>('login', this.messageService, null))
     )
   }
 
-  doSignup() {
+  doSignup({email, password}) {
+    return this.http.post<AuthUser>(this.api + '/local/register', {email, password}).pipe(
+      catchError(handleError<AuthUser>('login', this.messageService, null))
+    )
   }
 }
