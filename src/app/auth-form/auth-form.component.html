@@ -1,0 +1,48 @@
+<div class="w-1/2">
+  <form [formGroup]="loginForm" (ngSubmit)="handleLogin()"
+        class="shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div>
+      <label for="email">E-mail*</label>
+      <input type="email" name="email" id="email" formControlName="email" placeholder="Ton adresse e-mail"
+             class="shadow appearance-none rounded w-full py-3 px-2 leading-tight" required>
+      <span [hidden]="f.email.valid || f.email.pristine" class="text-red-600">Essaie de taper un e-mail valide</span>
+    </div>
+    <div>
+      <label for="password">Mot de passe*</label>
+      <input type="password" name="password" id="password" formControlName="password" placeholder="Ton mot de passe"
+             class="shadow appearance-none rounded w-full py-3 px-2 leading-tight" required>
+      <span [hidden]="f.password.valid || f.password.pristine" class="text-red-600">Tape ton mot de passe</span>
+      <p class="text-right"><a>Mot de passe oublié ?</a></p>
+    </div>
+    <input type="submit" value="Connexion" (click)="handleLogin()"
+           [disabled]="!loginForm.valid"
+           class="w-full flex items-center cursor-pointer justify-center px-8 mt-4 border border-transparent text-base leading-6 font-medium rounded-md text-teal-700 bg-indigo-100 hover:text-white hover:bg-indigo-900 focus:outline-none focus:shadow-outline-indigo focus:border-indigo-300 transition duration-150 ease-in-out md:py-4 md:text-lg md:px-1">
+  </form>
+</div>
+<div class="w-1/2">
+  <form [formGroup]="signupForm" (ngSubmit)="handleSignup()"
+        class="shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div>
+      <label for="sEmail">E-mail*</label>
+      <input type="email" name="email" id="sEmail" formControlName="email" placeholder="Ton adresse e-mail"
+             class="shadow appearance-none rounded w-full py-3 px-2 leading-tight" required>
+      <span [hidden]="fs.email.valid || fs.email.pristine" class="text-red-600">Essaie de taper un e-mail valide</span>
+    </div>
+    <div>
+      <label for="sPassword">Mot de passe*</label>
+      <input type="password" name="password" id="sPassword" formControlName="password" placeholder="Ton mot de passe"
+             class="shadow appearance-none rounded w-full py-3 px-2 leading-tight" required>
+      <span [hidden]="fs.password.valid || fs.password.pristine" class="text-red-600">Choisis un mot de passe d'au moins 8 caractères</span>
+    </div>
+    <div>
+      <label for="confirmPassword">Confirmation*</label>
+      <input type="password" name="confirmPassword" id="confirmPassword" formControlName="confirmPassword"
+             placeholder="Re-tape ton mot de passe"
+             class="shadow appearance-none rounded w-full py-3 px-2 leading-tight" required>
+      <span [hidden]="fs.confirmPassword.valid && fs.confirmPassword.pristine" class="text-red-600">Retape ton mot de passe à l'identique</span>
+    </div>
+    <input type="submit" value="S'inscrire" (click)="handleSignup()"
+           [disabled]="!signupForm.valid"
+           class="w-full flex items-center cursor-pointer justify-center px-8 mt-4 border border-transparent text-base leading-6 font-medium rounded-md text-teal-700 bg-indigo-100 hover:text-white hover:bg-indigo-900 focus:outline-none focus:shadow-outline-indigo focus:border-indigo-300 transition duration-150 ease-in-out md:py-4 md:text-lg md:px-1">
+  </form>
+</div>
