@@ -18,6 +18,13 @@
         <p *ngIf="nom && resultList.length===0">Cool ! Un nouveau lieu, continuons.</p>
       </div>
     </div>
+    <div id="step2" *ngIf="step===1">
+      <label for="">Région</label>
+
+      <label for="">Ville</label>
+      <p>Positionne le lieu sur la carte</p>
+      <app-map isSelectable></app-map>
+    </div>
     <div class="relative text-center my-5">
       <button *ngIf="step>0" (click)="prevStep()"
               class="whitespace-no-wrap inline-flex items-center justify-center px-2 py-1 mx-3 border border-transparent text-base leading-6 font-medium rounded-md text-teal-500 bg-gray-100 hover:border-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-15"

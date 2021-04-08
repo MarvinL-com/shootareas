@@ -4,7 +4,8 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:1337'
+  apiUrl: 'http://localhost:1337',
+  mapboxToken: 'pk.eyJ1IjoibWFydmlubCIsImEiOiJjazVscXhmdDYwZ2M3M29wYzNuNGEzNms2In0.hwLi0eazsobZG1uTDt9fVA'
 };
 
 /*

@@ -10,8 +10,8 @@ import {LocalStorageService} from "../local-storage.service";
   styleUrls: ['./auth-form.component.scss']
 })
 export class AuthFormComponent implements OnInit {
-  @Input() login
-  @Input() signup
+  @Input() login: (arg0: any) => void
+  @Input() signup: (arg0: any) => void
   loginForm: FormGroup
   signupForm: FormGroup
 
@@ -41,7 +41,7 @@ export class AuthFormComponent implements OnInit {
   }
 
   handleLogin() {
-    if (this.loginForm.invalid) return
+    if (this.loginForm.invalid) return  //todo handle errors
     this.login(this.loginForm.value)
   }
 

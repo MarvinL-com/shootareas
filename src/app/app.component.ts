@@ -8,6 +8,7 @@ import {LocalStorageService} from "./local-storage.service";
 })
 export class AppComponent {
   title = 'ShootAreas';
+  isMenuShown = false;
 
   constructor(private ls: LocalStorageService) {
   }
@@ -18,5 +19,16 @@ export class AppComponent {
 
   get user() {
     return this.ls.getObject('user')
+  }
+
+  toggleMenu(): void {
+    this.isMenuShown = !this.isMenuShown
+  }
+
+
+  handleLogout(): void {
+    this.ls.remove('token')
+    this.ls.remove('user')
+    this.toggleMenu()
   }
 }

@@ -1,6 +1,7 @@
 <div class="relative bg-white">
   <div class="max-w-7xl mx-auto px-4 sm:px-6">
-    <div class="flex justify-between items-center border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
+    <div
+      class="flex justify-between items-center border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
       <div class="lg:w-0 lg:flex-1">
         <a routerLink="/" class="flex">
           <h1 class=" font-bold text-2xl text-teal-500">
@@ -12,8 +13,10 @@
         <button type="button"
                 class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
           <!-- Heroicon name: menu -->
-          <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+               stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"/>
           </svg>
         </button>
       </div>
@@ -33,7 +36,24 @@
            class="whitespace-no-wrap text-base leading-6 font-medium text-gray-500 hover:text-gray-900 focus:outline-none focus:text-gray-900">
           Log in
         </a>
-        <a *ngIf="isLogin" class="font-semibold text-indigo-500">{{user.email}}</a>
+        <button type="button" *ngIf="isLogin" (click)="toggleMenu()"
+           class="font-semibold text-indigo-500 focus:outline-none">{{user.email}}</button>
+        <div [hidden]="!isMenuShown"
+             class="origin-top-right absolute mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+             role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+          <div class="py-1" role="none">
+            <a href="#"
+               class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+               role="menuitem">Mon compte</a>
+
+            <button type="button"
+                    (click)="handleLogout()"
+                    class="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-100 bg-red-600 hover:bg-red-500 hover:text-gray-900 rounded-b-md"
+                    role="menuitem">
+              Déconnexion
+            </button>
+          </div>
+        </div>
         <span class="inline-flex rounded-md shadow-sm">
           <a routerLink="/ajouter"
              class="whitespace-no-wrap inline-flex items-center justify-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150">

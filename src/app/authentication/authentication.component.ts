@@ -25,17 +25,23 @@ export class AuthenticationComponent implements OnInit {
     }
   }
 
-  handleLogin(formData) {
-    this.authService.doLogin(formData).subscribe(({jwt, user}) => {
-        this.ls.set('token', jwt)
-        this.ls.setObject('user', user)
-        this.location.back()
-        this.messageService.add('Connexion réussie')
+  handleLogin(formData): void {
+     this.authService.doLogin(formData).subscribe(({jwt, user}
+      ) => {
+        if (jwt !== null) {
+          this.ls.set('token', jwt)
+          this.ls.setObject('user', user)
+          this.messageService.add('Connexion réussie')
+          this.location.go("")
+        } else {
+          this.messageService.add('Une erreur est survenue')
+        }
       }
     )
+
   }
 
-  handleSignup(formData) {
+  handleSignup(formData): void {
     this.authService.doSignup(formData).subscribe(({jwt, user}) => {
         this.ls.set('token', jwt)
         this.ls.setObject('user', user)
@@ -43,4 +49,5 @@ export class AuthenticationComponent implements OnInit {
       }
     )
   }
+
 }

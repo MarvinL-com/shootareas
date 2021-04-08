@@ -14,6 +14,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {UniversalAppInterceptor} from "./universal-app-interceptor";
 import { AddLieuComponent } from './add-lieu/add-lieu.component';
 import { FormStepsComponent } from './form-steps/form-steps.component';
+import { MapComponent } from './map/map.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { FormStepsComponent } from './form-steps/form-steps.component';
     AuthFormComponent,
     AddLieuComponent,
     FormStepsComponent,
+    MapComponent,
   ],
   imports: [
     BrowserModule,

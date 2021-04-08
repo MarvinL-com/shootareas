@@ -22,9 +22,13 @@ export class AuthenticationService {
     )
   }
 
-  doSignup({email, password}) {
+  doSignup({email, password}): Observable<AuthUser> {
     return this.http.post<AuthUser>(this.api + '/local/register', {email, password}).pipe(
       catchError(handleError<AuthUser>('login', this.messageService, null))
     )
+  }
+
+  doLogout(): void{
+
   }
 }
