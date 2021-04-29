@@ -7,7 +7,7 @@ import {CommonModule} from "@angular/common";
   styleUrls: ['./form-steps.component.scss']
 })
 export class FormStepsComponent implements OnInit {
-  @Input() steps
+  @Input() steps: Array<object>
   @Input() step: number
 
   constructor(commonModule: CommonModule) {

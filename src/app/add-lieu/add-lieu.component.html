@@ -1,42 +1,158 @@
 <div class="relative bg-white container mx-auto py-5">
-  <h1>Ajoutons un nouveau lieu</h1>
-  <app-form-steps [steps]="[{title:'Nom'}, {title: 'Localisation'}, {title: 'Avis'}]" [step]="step"></app-form-steps>
-  <form [formGroup]="addLieuForm" (ngSubmit)="handleSubmit()">
-    <div id="step1" *ngIf="step===0">
-      <label for="nom">Nom du lieu</label>
-      <input type="text" name="nom" id="nom" formControlName="nom" placeholder="Tape le nom du lieu"
-             (input)="handleSearch()"
-             class="shadow appearance-none rounded w-full py-3 px-2 leading-tight"/>
-      <div *ngIf="resultList.length>0" class="resultList my-4">
-        <p>On a déjà {{resultList.length>1 ? 'des lieux' : 'un lieu'}} avec un nom similaire dans notre base, trouves-tu le tiens dans la liste ?</p>
-        <div *ngFor="let lieu of resultList">
-          <div (click)="selectLieu(lieu)" class="p-3 bg-purple-100 rounded border border-purple-400">
-            <h4 class="font-semibold">{{lieu.nom}}</h4>
-            <p class="text-sm text-italic text-right mt-3">{{lieu.localisation.city}}, {{lieu.localisation.zipcode}}</p>
+  <h1 class="text-2xl font-bold text-indigo-500">
+    Ajoutons {{nom === '' ? "un nouveau lieu" : nom}}</h1>
+  <app-form-steps [steps]="steps" [step]="step"></app-form-steps>
+  <div>
+    <form [formGroup]="addLieuForm" (ngSubmit)="handleSubmit()">
+      <div id="step1" *ngIf="step===0">
+        <label for="nom">Nom du lieu</label>
+        <input type="text" name="nom" id="nom" formControlName="nom"
+               placeholder="Tape le nom du lieu"
+               (input)="handleSearch()"
+               class="shadow appearance-none rounded w-full py-3 px-2 leading-tight"/>
+        <div *ngIf="resultList.length>0" class="resultList my-4">
+          <p>On a déjà {{resultList.length > 1 ? 'des lieux' : 'un lieu'}} avec un nom similaire
+            dans notre base, trouves-tu le tiens dans la liste ?</p>
+          <div *ngFor="let lieu of resultList">
+            <div (click)="selectLieu(lieu)"
+                 class="p-3 bg-purple-100 rounded border border-purple-400">
+              <h4 class="font-semibold">{{lieu.nom}}</h4>
+              <p class="text-sm text-italic text-right mt-3">{{lieu.localisation.city}}
+                , {{lieu.localisation.zipcode}}</p>
+            </div>
           </div>
+          <p>Pas dans cette liste ?
+            <button type="button" (click)="findLocation()"
+                    class="whitespace-no-wrap inline-flex items-center justify-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150">
+              Recherchons ailleurs
+            </button>
+          </p>
         </div>
-        <p *ngIf="nom && resultList.length===0">Cool ! Un nouveau lieu, continuons.</p>
+        <div *ngIf="nom !== '' && resultList.length===0">
+          <span>Cool ! On a pas encore ce lieu en machine </span>
+          <button (click)="nextStep()"
+                  class="whitespace-no-wrap inline-flex items-center justify-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150">
+            Affinons sa localisation
+          </button>
+        </div>
+        <app-map [location]="location" isSelectable></app-map>
       </div>
-    </div>
-    <div id="step2" *ngIf="step===1">
-      <label for="">Région</label>
+      <div id="step2" *ngIf="step===1">
+        <label for="region">Région</label>
+        <ul *ngFor="let region of regionList" id="region">
+          <li><input type="radio" name="region" formControlName="region" [value]="region"
+                     (change)="selectRegion(region)"> {{region.nom}}</li>
+        </ul>
+        <div *ngIf="selectedRegion !== undefined">
+          <label for="region">Ville/Commune</label>
+          <select name="city" formControlName="city" #city id="city"
+                  (change)="selectCity(city.value)">
+            <option *ngFor="let city of cityList; index as i" [value]="i">{{city.nom}}</option>
+          </select>
+        </div>
+        <p>Affine le positionnement du lieu en faisant glisser la carte</p>
+        <app-map [location]="location" (handleLocationChange)="updateLocation($event)"
+                 isSelectable></app-map>
+      </div>
+      <div id="step3" *ngIf="step===2">
+        <!--        <div>-->
+        <!--          <b>{{nom}}</b>-->
+        <!--          <p>-->
+        <!--            {{newLieu?.city?.nom}}-->
+        <!--            <br>-->
+        <!--            {{zip}}-->
+        <!--          </p>-->
+        <!--        </div>-->
+        <h3 class="text-lg font-bold">Ton avis</h3>
+        <div>
+          <div class="w-100 py-6">
+            <label for="accessible" class="w-auto">Le lieu est-il accessible ?</label>
+            <div class="mt-2">
+              <input type="range" name="accessible" id="accessible"
+                     min="1" max="5" step="1"
+                     class="rounded-lg overflow-hidden appearance-none bg-teal-100 h-3 w-full">
+              <div class="grid grid-cols-5">
+                <div class="col-auto text-left">Doigts dans le nez !</div>
+                <div class="col-span-3 text-center">Tranquille</div>
+                <div class="col-auto text-right">Réservé aux casse-cous</div>
+              </div>
+            </div>
+          </div>
+          <div class="w-100 py-6">
+            <label for="accessible" class="w-auto">Il y a-t-il du passage ?</label>
+            <div class="mt-2">
+              <input type="range" name="passage"
+                     min="1" max="5" step="1"
+                     class="rounded-lg overflow-hidden appearance-none bg-teal-100 h-3 w-full">
+              <div class="grid grid-cols-5">
+                <div class="col-auto text-left">Désert</div>
+                <div class="col-span-3 text-center">Calme</div>
+                <div class="col-auto text-right">Tout le monde est ici</div>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 my-6">
+            <div class="mx-auto">
+              <input type="checkbox" name="nocturne"
+                     id="nocturne"
+                     class="form-checkbox h-5 w-5 rounded-lg">
+              <label for="nocturne">Est-il accessible de nuit ?</label>
+            </div>
 
-      <label for="">Ville</label>
-      <p>Positionne le lieu sur la carte</p>
-      <app-map isSelectable></app-map>
-    </div>
-    <div class="relative text-center my-5">
-      <button *ngIf="step>0" (click)="prevStep()"
-              class="whitespace-no-wrap inline-flex items-center justify-center px-2 py-1 mx-3 border border-transparent text-base leading-6 font-medium rounded-md text-teal-500 bg-gray-100 hover:border-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-15"
-      >Retour
-      </button>
-      <button
-        [ngClass]="{'cursor-not-allowed opacity-50': isDisabled() }"
-        class="whitespace-no-wrap inline-flex items-center justify-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150"
-        [disabled]="isDisabled()"
-        (click)="nextStep()">
-        Suivant
-      </button>
-    </div>
-  </form>
+            <div class="mx-auto">
+              <input type="checkbox" name="public" id="public"
+                     class="form-checkbox h-5 w-5 rounded-lg">
+              <label for="public">Est-ce un lieu
+                public ?</label>
+            </div>
+          </div>
+
+          <div class="w-100 py-6">
+            <label for="accessible">Si tu devais lui mettre une note
+              ?</label>
+            <input type="range" min="1" max="5" step="1"
+                   class="rounded-lg overflow-hidden appearance-none bg-teal-100 h-3 w-full"
+                   name="note">
+            <div class="grid grid-cols-5">
+              <div class="col-auto text-left">Jamais j'y retourne</div>
+              <div class="col-span-3 text-center">Cool</div>
+              <div class="col-auto text-right">
+                Giga Top !
+                <br>
+                <small class="text-indigo-400 italic">Je regrette presque de le partager</small>
+              </div>
+            </div>
+          </div>
+          <div class="w-100 py-6">
+            <label for="accessible">Avis, anecdote, recommendation…</label>
+            <textarea name="message" id="message" cols="30" rows="10"
+                      class="mt-2 w-full rounded-lg py-3 border-2 border-gray-300"></textarea>
+          </div>
+
+          <ul class="w-100 py-6">
+            <li *ngFor="let link of nbLinks; index as nb">
+              <input type="url" name="links[]"
+                     [id]="nb"
+                     placeholder="URL d'un·e de tes photo/vidéo"
+                     class="w-9/12 py-3 px-4 rounded-lg border-2 border-gray-300">
+              <button (click)="moreLinks()" class="">+</button>
+              <button *ngIf="nbLinks.length > 1" (click)="lessLinks(nb)" class="">-</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="relative text-center my-5">
+        <button *ngIf="step>0" (click)="prevStep()"
+                class="whitespace-no-wrap inline-flex items-center justify-center px-2 py-1 mx-3 border border-transparent text-base leading-6 font-medium rounded-md text-teal-500 bg-gray-100 hover:border-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-15"
+        >Retour
+        </button>
+        <button [ngClass]="{'cursor-not-allowed opacity-50': isDisabled() }"
+                class="whitespace-no-wrap inline-flex items-center justify-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150"
+                [disabled]="isDisabled()"
+                (click)="nextStep()">
+          Suivant
+        </button>
+      </div>
+    </form>
+  </div>
 </div>
