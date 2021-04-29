@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/shoots",
+      "handler": "shoot.find",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shoots/count",
+      "handler": "shoot.count",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/shoots/:id",
+      "handler": "shoot.findOne",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/shoots",
+      "handler": "shoot.create",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/shoots/:id",
+      "handler": "shoot.update",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/shoots/:id",
+      "handler": "shoot.delete",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

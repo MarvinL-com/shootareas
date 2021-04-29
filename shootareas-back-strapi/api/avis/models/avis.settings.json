@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "avis",
+  "info": {
+    "name": "Avis",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "accessible": {
+      "type": "integer"
+    },
+    "passage": {
+      "type": "integer"
+    },
+    "accesNocturne": {
+      "type": "boolean"
+    },
+    "note": {
+      "type": "integer"
+    },
+    "public": {
+      "type": "boolean"
+    },
+    "createdAt": {
+      "type": "datetime"
+    },
+    "eclaireur": {
+      "plugin": "admin",
+      "model": "user"
+    },
+    "isEclaireur": {
+      "type": "boolean"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "regions",
+  "info": {
+    "name": "Region",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "nom": {
+      "type": "string"
+    },
+    "lieux": {
+      "via": "region",
+      "collection": "lieu"
+    },
+    "slug": {
+      "type": "string"
+    },
+    "coords": {
+      "type": "component",
+      "repeatable": false,
+      "component": "location.coords"
+    },
+    "code": {
+      "type": "integer"
+    }
+  }
+}

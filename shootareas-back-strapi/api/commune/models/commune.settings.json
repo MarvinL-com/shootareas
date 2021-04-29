@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "communes",
+  "info": {
+    "name": "commune"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "nom": {
+      "type": "string"
+    },
+    "zipcode": {
+      "type": "integer"
+    },
+    "region": {
+      "model": "region"
+    }
+  }
+}
