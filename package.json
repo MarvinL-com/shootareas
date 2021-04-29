@@ -1,0 +1,19 @@
+{
+  "name": "shootareas",
+  "version": "1.0.0",
+  "private": true,
+  "license": "UNLICENSED",
+  "workspaces": [
+    "modules/*"
+  ],
+  "scripts": {
+    "front": "yarn workspace @shootareas/front",
+    "back": "yarn workspace @shootareas/back",
+    "start": "concurrently -n FRONT,BACK \"yarn front start\" \"yarn back develop\"",
+    "lint:pretty": "prettier -c 'modules/**/*.{ts,tsx}'"
+  },
+  "devDependencies": {
+    "concurrently": "^6.0.2",
+    "prettier": "^2.2.1"
+  }
+}
