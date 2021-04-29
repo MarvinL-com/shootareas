@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "lieu",
+  "info": {
+    "name": "Lieu",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "nom": {
+      "type": "string"
+    },
+    "localisation": {
+      "type": "json"
+    },
+    "region": {
+      "model": "region",
+      "via": "lieux"
+    },
+    "eclaireur": {
+      "plugin": "users-permissions",
+      "model": "user"
+    },
+    "shoots": {
+      "collection": "shoot",
+      "via": "lieu"
+    },
+    "slug": {
+      "type": "string",
+      "required": false,
+      "unique": false
+    },
+    "type": {
+      "type": "string"
+    },
+    "commune": {
+      "model": "commune"
+    }
+  }
+}
