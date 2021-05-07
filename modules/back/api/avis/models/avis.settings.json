@@ -26,15 +26,22 @@
     "public": {
       "type": "boolean"
     },
-    "createdAt": {
-      "type": "datetime"
-    },
     "eclaireur": {
       "plugin": "admin",
       "model": "user"
     },
     "isEclaireur": {
       "type": "boolean"
+    },
+    "message": {
+      "type": "richtext"
+    },
+    "links": {
+      "type": "json"
+    },
+    "lieu": {
+      "via": "avis",
+      "model": "lieu"
     }
   }
 }

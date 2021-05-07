@@ -25,10 +25,6 @@
       "plugin": "users-permissions",
       "model": "user"
     },
-    "shoots": {
-      "collection": "shoot",
-      "via": "lieu"
-    },
     "slug": {
       "type": "string",
       "required": false,
@@ -39,6 +35,10 @@
     },
     "commune": {
       "model": "commune"
+    },
+    "avis": {
+      "collection": "avis",
+      "via": "lieu"
     }
   }
 }
