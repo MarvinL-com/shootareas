@@ -10,9 +10,10 @@ import {GeolocateControl, LngLatLike, Map, Marker} from 'mapbox-gl'
 export class MapComponent implements OnInit {
   map: Map
   marker: Marker
-  @Input() location: { latitude: number, longitude: number } = {latitude: 38, longitude: -122}
+  @Input() location: { latitude: number, longitude: number }
+  @Input() zoom : number  = 8
   @Input() isSelectable: boolean = false
-  @Output() handleLocationChange = new EventEmitter<LngLatLike>();
+  @Output() handleLocationChange = new EventEmitter<LngLatLike>()
 
   constructor() {
   }
@@ -34,10 +35,10 @@ export class MapComponent implements OnInit {
       accessToken: environment.mapboxToken,
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
-      zoom: 8,
+      zoom: this.zoom,
       center: [this.location.longitude, this.location.latitude]
     })
-    this.marker = new Marker({draggable: true}).setLngLat([0, 0]).on('dragend', e => this.updateLocation(e))
+    this.marker = new Marker({draggable: this.isSelectable}).setLngLat([this.location.longitude, this.location.latitude]).on('dragend', e => this.updateLocation(e))
     this.marker.addTo(this.map)
 
     this.map.addControl(new GeolocateControl({

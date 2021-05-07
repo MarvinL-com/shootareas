@@ -1,6 +1,18 @@
 <div *ngIf="lieu" class="container">
   <app-map [location]="lieu.localisation" [zoom]="10"></app-map>
-  <button (click)="goBack()">Retour</button>
-  <h1 class="text-right text-4xl text-teal-600 font-bold">{{lieu.nom}}</h1>
-  <p>{{lieu.commune.nom}}, {{lieu.commune.zipcode}} {{lieu.region.nom}}</p>
+  <button (click)="goBack()" class="btn btn-small mt-3 ml-2 bg-gray-200 hover:bg-indigo-300 ">
+    Retour
+  </button>
+  <div class="ml-auto max-w-md">
+    <a [routerLink]="'/region/'+lieu.region.slug"
+       class="px-2 py-1 text-white font-semibold text-xs rounded-md bg-red-600">{{lieu.region.nom}}</a>
+    <h1 class="text-4xl font-bold">{{lieu.nom}}</h1>
+    <p>{{lieu.commune.nom}}, {{lieu.commune.zipcode}}</p>
+  </div>
+  <div>
+    <app-user-avatar [user]="lieu.eclaireur"></app-user-avatar>
+  </div>
+  <app-lieu-notes-panel [avis]="getMainAvis()"></app-lieu-notes-panel>
+  <p
+    class="p-4 mt-3 rounded-md border-2 border-indigo-100 bg-white">{{getMainAvis().message}}</p>
 </div>

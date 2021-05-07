@@ -3,6 +3,7 @@ import {Lieu} from "../lieu";
 import {ActivatedRoute} from "@angular/router";
 import {LieuService} from "../lieu.service";
 import {Location} from "@angular/common";
+import {Avis} from "../avis";
 
 @Component({
   selector: 'app-lieu-detail',
@@ -25,6 +26,10 @@ export class LieuDetailComponent implements OnInit {
   getLieu(): void {
     const slug = this.route.snapshot.paramMap.get('slug')
     this.lieuService.doGetLieuBySlug(slug).subscribe(lieux => this.lieu = lieux[0])
+  }
+
+  getMainAvis(): Avis {
+    return this.lieu.avis.find(a => a.isEclaireur)
   }
 
   goBack(): void {

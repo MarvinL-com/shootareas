@@ -5,6 +5,6 @@ export interface Avis {
   public: boolean
   message: string
   note: number
-  createdAt: string
   links: object
+  isEclaireur: boolean
 }

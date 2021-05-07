@@ -11,7 +11,7 @@ export interface Lieu {
   region: Region
   city: City
   eclaireur: User
-  avis: Avis
+  avis: Avis[]
   shoots: object
   created_at: string
 }

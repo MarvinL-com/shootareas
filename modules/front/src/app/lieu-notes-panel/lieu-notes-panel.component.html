@@ -1,0 +1,50 @@
+<div class="flex flex-row p-4 space-y-3 space-x-4 justify-center">
+  <div class="flex-shrink-0 w-1/3 content-center justify-center">
+    <p class="ml-3 font-bold">Note</p>
+    <div class="p-4 rounded-md bg-blue-100 text-center">
+      <h5 class="text-5xl font-extrabold">
+        {{avis.note}}
+        <small class="font-normal text-sm">/5</small></h5>
+      <small class="text-xs text-indigo-400">{{criteres.note[avis.note]}}</small>
+    </div>
+  </div>
+  <div class="flex-row space-y-3 pt-2">
+    <div class="flex flex-row content-center">
+      <div class="w-12 h-12 p-3 rounded-md bg-blue-100 text-center">
+        <h5>{{avis.accessible}}</h5>
+      </div>
+      <p class="ml-3 font-bold align-middle">
+        Accessible
+        <br>
+        <small class="text-xs text-indigo-400">{{criteres.accessible[avis.accessible]}}</small>
+      </p>
+    </div>
+    <div class="flex flex-row content-center">
+      <div class="w-12 h-12 p-3 rounded-md bg-blue-100 text-center">
+        <h5>{{avis.passage}}</h5>
+      </div>
+      <p class="ml-3 font-bold align-middle">
+        Passage
+        <br>
+        <small class="text-xs text-indigo-400">{{criteres.passage[avis.passage]}}</small>
+      </p>
+    </div>
+  </div>
+  <div class="flex flex-col space-y-3">
+    <div *ngIf="avis.accesNocturne" class="p-3 rounded-md bg-indigo-800">
+      <p class="ml-3 text-white font-bold">
+        Accessible de Nuit
+        <br>
+        <small class="text-xs text-gray-400">Attention aux zombies</small>
+      </p>
+    </div>
+    <div *ngIf="avis.public" class="flex flex-row content-center">
+      <div class="w-8 h-8 p-1 rounded-md bg-blue-100 text-center">
+        <span>P</span>
+      </div>
+      <p class="ml-2 font-bold align-middle">
+        Lieu Public
+      </p>
+    </div>
+  </div>
+</div>

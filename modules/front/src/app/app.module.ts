@@ -15,6 +15,8 @@ import {UniversalAppInterceptor} from "./universal-app-interceptor";
 import { AddLieuComponent } from './add-lieu/add-lieu.component';
 import { FormStepsComponent } from './form-steps/form-steps.component';
 import { MapComponent } from './map/map.component';
+import { UserAvatarComponent } from './user-avatar/user-avatar.component';
+import { LieuNotesPanelComponent } from './lieu-notes-panel/lieu-notes-panel.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,8 @@ import { MapComponent } from './map/map.component';
     AddLieuComponent,
     FormStepsComponent,
     MapComponent,
+    UserAvatarComponent,
+    LieuNotesPanelComponent,
   ],
   imports: [
     BrowserModule,
