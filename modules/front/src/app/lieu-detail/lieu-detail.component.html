@@ -1,5 +1,6 @@
 <div *ngIf="lieu" class="container">
+  <app-map [location]="lieu.localisation" [zoom]="10"></app-map>
   <button (click)="goBack()">Retour</button>
-  <h1>{{lieu.nom}}</h1>
-  <p>{{lieu.localisation.city}}, {{lieu.localisation.zipcode}}</p>
+  <h1 class="text-right text-4xl text-teal-600 font-bold">{{lieu.nom}}</h1>
+  <p>{{lieu.commune.nom}}, {{lieu.commune.zipcode}} {{lieu.region.nom}}</p>
 </div>

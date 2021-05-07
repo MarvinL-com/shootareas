@@ -10,6 +10,7 @@ import {CityService} from "../city.service";
 import {LngLatLike} from "mapbox-gl";
 import {City} from "../city";
 import _ from 'lodash'
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-add-lieu',
@@ -17,7 +18,7 @@ import _ from 'lodash'
   styleUrls: ['./add-lieu.component.scss']
 })
 export class AddLieuComponent implements OnInit {
-  step: number = 2
+  step: number = 0
   steps: Array<object> = [{title: 'Nom'}, {title: 'Localisation'}, {title: 'Avis'}]
   addLieuForm: FormGroup
   nbLinks: Array<number> = [0]
@@ -42,7 +43,7 @@ export class AddLieuComponent implements OnInit {
   }
 
 
-  constructor(private fb: FormBuilder, private lieuService: LieuService, private cityService: CityService, private regionService: RegionService, private lsService: LocalStorageService) {
+  constructor(private fb: FormBuilder, private lieuService: LieuService, private cityService: CityService, private regionService: RegionService, private lsService: LocalStorageService, private router: Router) {
   }
 
   get nom(): string {
@@ -60,9 +61,18 @@ export class AddLieuComponent implements OnInit {
 
   ngOnInit(): void {
     this.addLieuForm = this.fb.group({
-      'nom': [''],
+      nom: new FormControl('', Validators.required),
       region: new FormControl('', Validators.required),
-      city: new FormControl('', Validators.required)
+      city: new FormControl('', Validators.required),
+      avis: new FormGroup({
+        accessible: new FormControl(0),
+        passage: new FormControl(3),
+        nocturne: new FormControl(false),
+        public: new FormControl(false),
+        note: new FormControl(2),
+        message: new FormControl(''),
+        links: new FormControl('')
+      })
     })
     this.regionService.doGetRegions().subscribe(result => {
       this.regionList = result
@@ -82,12 +92,8 @@ export class AddLieuComponent implements OnInit {
   }
 
 
-  selectLieu = (lieu: Lieu = null): void => {
-    if (lieu !== null) {
-      //todo handle select existing Lieu
-      return
-    }
-    this.addLieuForm.patchValue({nom: this.nom})
+  selectLieu = (lieu: Lieu): void => {
+    //todo handle select existing Lieu
   }
 
   selectRegion = (region): void => {
@@ -110,7 +116,16 @@ export class AddLieuComponent implements OnInit {
   }
 
   isDisabled(): boolean {
-    return this.nom === '' || this.resultList.length > 0
+    const {region, city, localisation, avis} = this.newLieu
+    switch (this.step) {
+      case 0:
+        return this.nom === '' || this.resultList.length > 0
+      case 1:
+        return region === undefined || city === undefined || localisation === undefined
+      case 2:
+        return !this.addLieuForm.valid
+    }
+
   }
 
   prevStep(): void {
@@ -121,23 +136,26 @@ export class AddLieuComponent implements OnInit {
     this.step++
   }
 
+  goStep(step: number): void {
+    this.step = step
+  }
+
   moreLinks(): void {
-    this.nbLinks.push(_.max(this.nbLinks)+1)
+    this.nbLinks.push(_.max(this.nbLinks) + 1)
   }
 
   lessLinks(id): void {
-    console.log(this.nbLinks)
     this.nbLinks = this.nbLinks.filter((n, index) => id !== index)
   }
 
   handleSubmit(): void {
-    switch (this.step) {
-      case 0:
-        this.selectLieu()
-        this.nextStep()
-        break
-      default:
-        break
-    }
+    //patch values from FORM to newLieu
+    this.newLieu = {...this.newLieu, avis: this.addLieuForm.get('avis').value, nom: this.nom}
+
+    //send newLieu to Back
+    this.lieuService.doSaveLieu(this.newLieu).subscribe(lieu => {
+      //success
+      this.router.navigate(['/lieu/' + lieu.slug])
+    })
   }
 }

@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {CommonModule} from "@angular/common";
 
 @Component({
@@ -9,10 +9,13 @@ import {CommonModule} from "@angular/common";
 export class FormStepsComponent implements OnInit {
   @Input() steps: Array<object>
   @Input() step: number
+  @Output() setStep = new EventEmitter<number>()
 
   constructor(commonModule: CommonModule) {
   }
 
   ngOnInit(): void {
   }
+
+  handleClick = (step: number): void => this.setStep.emit(step)
 }

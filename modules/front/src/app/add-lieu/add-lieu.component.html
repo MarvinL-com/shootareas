@@ -1,9 +1,9 @@
 <div class="relative bg-white container mx-auto py-5">
   <h1 class="text-2xl font-bold text-indigo-500">
     Ajoutons {{nom === '' ? "un nouveau lieu" : nom}}</h1>
-  <app-form-steps [steps]="steps" [step]="step"></app-form-steps>
+  <app-form-steps [steps]="steps" [step]="step" (setStep)="goStep($event)"></app-form-steps>
   <div>
-    <form [formGroup]="addLieuForm" (ngSubmit)="handleSubmit()">
+    <form [formGroup]="addLieuForm">
       <div id="step1" *ngIf="step===0">
         <label for="nom">Nom du lieu</label>
         <input type="text" name="nom" id="nom" formControlName="nom"
@@ -16,7 +16,9 @@
           <div *ngFor="let lieu of resultList">
             <div (click)="selectLieu(lieu)"
                  class="p-3 bg-purple-100 rounded border border-purple-400">
-              <h4 class="font-semibold">{{lieu.nom}}</h4>
+              <a [routerLink]="'/lieu/'+lieu.slug">
+                <h4 class="font-semibold">{{lieu.nom}}</h4>
+              </a>
               <p class="text-sm text-italic text-right mt-3">{{lieu.localisation.city}}
                 , {{lieu.localisation.zipcode}}</p>
             </div>
@@ -60,15 +62,16 @@
         <!--          <p>-->
         <!--            {{newLieu?.city?.nom}}-->
         <!--            <br>-->
+        <!--            {{newLieu?.localisation.latitude}}, {{newLieu?.localisation.longitude}}-->
         <!--            {{zip}}-->
         <!--          </p>-->
         <!--        </div>-->
         <h3 class="text-lg font-bold">Ton avis</h3>
-        <div>
+        <div formGroupName="avis">
           <div class="w-100 py-6">
             <label for="accessible" class="w-auto">Le lieu est-il accessible ?</label>
             <div class="mt-2">
-              <input type="range" name="accessible" id="accessible"
+              <input type="range" name="accessible" formControlName="accessible" id="accessible"
                      min="1" max="5" step="1"
                      class="rounded-lg overflow-hidden appearance-none bg-teal-100 h-3 w-full">
               <div class="grid grid-cols-5">
@@ -79,9 +82,9 @@
             </div>
           </div>
           <div class="w-100 py-6">
-            <label for="accessible" class="w-auto">Il y a-t-il du passage ?</label>
+            <label for="passage" class="w-auto">Il y a-t-il du passage ?</label>
             <div class="mt-2">
-              <input type="range" name="passage"
+              <input type="range" name="passage" id="passage" formControlName="passage"
                      min="1" max="5" step="1"
                      class="rounded-lg overflow-hidden appearance-none bg-teal-100 h-3 w-full">
               <div class="grid grid-cols-5">
@@ -93,14 +96,14 @@
           </div>
           <div class="grid grid-cols-2 my-6">
             <div class="mx-auto">
-              <input type="checkbox" name="nocturne"
+              <input type="checkbox" formControlName="nocturne" name="nocturne"
                      id="nocturne"
                      class="form-checkbox h-5 w-5 rounded-lg">
               <label for="nocturne">Est-il accessible de nuit ?</label>
             </div>
 
             <div class="mx-auto">
-              <input type="checkbox" name="public" id="public"
+              <input type="checkbox" formControlName="public" name="public" id="public"
                      class="form-checkbox h-5 w-5 rounded-lg">
               <label for="public">Est-ce un lieu
                 public ?</label>
@@ -108,11 +111,11 @@
           </div>
 
           <div class="w-100 py-6">
-            <label for="accessible">Si tu devais lui mettre une note
+            <label for="note">Si tu devais lui mettre une note
               ?</label>
             <input type="range" min="1" max="5" step="1"
                    class="rounded-lg overflow-hidden appearance-none bg-teal-100 h-3 w-full"
-                   name="note">
+                   formControlName="note" name="note" id="note">
             <div class="grid grid-cols-5">
               <div class="col-auto text-left">Jamais j'y retourne</div>
               <div class="col-span-3 text-center">Cool</div>
@@ -124,15 +127,15 @@
             </div>
           </div>
           <div class="w-100 py-6">
-            <label for="accessible">Avis, anecdote, recommendation…</label>
-            <textarea name="message" id="message" cols="30" rows="10"
+            <label for="message">Avis, anecdote, recommendation…</label>
+            <textarea formControlName="message" name="message" id="message" cols="30" rows="10"
                       class="mt-2 w-full rounded-lg py-3 border-2 border-gray-300"></textarea>
           </div>
 
           <ul class="w-100 py-6">
             <li *ngFor="let link of nbLinks; index as nb">
-              <input type="url" name="links[]"
-                     [id]="nb"
+              <input type="url" formControlName="links" name="links[]"
+                     [id]="'links-'+nb"
                      placeholder="URL d'un·e de tes photo/vidéo"
                      class="w-9/12 py-3 px-4 rounded-lg border-2 border-gray-300">
               <button (click)="moreLinks()" class="">+</button>
@@ -146,11 +149,21 @@
                 class="whitespace-no-wrap inline-flex items-center justify-center px-2 py-1 mx-3 border border-transparent text-base leading-6 font-medium rounded-md text-teal-500 bg-gray-100 hover:border-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-15"
         >Retour
         </button>
-        <button [ngClass]="{'cursor-not-allowed opacity-50': isDisabled() }"
-                class="whitespace-no-wrap inline-flex items-center justify-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150"
+        <button *ngIf="step < steps.length-1"
                 [disabled]="isDisabled()"
-                (click)="nextStep()">
+                (click)="nextStep()"
+                [ngClass]="{'cursor-not-allowed opacity-50': isDisabled() }"
+                class="whitespace-no-wrap inline-flex items-center justify-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150"
+        >
           Suivant
+        </button>
+        <button *ngIf="step === steps.length-1"
+                [disabled]="isDisabled()"
+                (click)="handleSubmit()"
+                [ngClass]="{'cursor-not-allowed opacity-50': isDisabled() }"
+                class="whitespace-no-wrap inline-flex items-center justify-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150"
+        >
+          Enregistrer
         </button>
       </div>
     </form>
