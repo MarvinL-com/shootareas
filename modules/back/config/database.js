@@ -1,5 +1,5 @@
 module.exports = ({ env }) => ({
-  defaultConnection: 'default',
+  defaultConnection: env('DATABASE_TYPE', 'default'),
   connections: {
     default: {
       connector: 'bookshelf',
@@ -11,5 +11,20 @@ module.exports = ({ env }) => ({
         useNullAsDefault: true,
       },
     },
+	dev: {
+		connector:'bookshelf',
+		settings: {
+			client: 'postgres',
+			host: env('DATABASE_HOST', 'localhost'),
+			port: env.int('DATABASE_PORT', 5432),
+			database: env('DATABASE_NAME', 'strapi'),
+			username: env('DATABASE_USERNAME', 'strapi'),
+			password: env('DATABASE_PASSWORD', 'strapi'),
+			schema: env('DATABASE_SCHEMA', 'public'), // Not Required
+			ssl: {
+			  rejectUnauthorized: env.bool('DATABASE_SSL_SELF', false), // For self-signed certificates
+			},
+		}
+	}
   },
 });
